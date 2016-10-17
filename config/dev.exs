@@ -49,3 +49,5 @@ config :exq,
   concurrency: 10,
   queues: ["default"],
   max_retries: 5
+
+import_config "dev.secret.exs"

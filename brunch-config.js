@@ -2,14 +2,7 @@ exports.config = {
   // See http://brunch.io/#documentation for docs.
   files: {
     javascripts: {
-      joinTo: "js/app.js",
-      // To change the order of concatenation of files, explicitly mention here
-      order: {
-        before: [
-          "web/static/vendor/jquery/dist/jquery.min.js",
-          "web/static/vendor/bootstrap/dist/js/bootstrap.js"
-        ]
-      }
+      joinTo: "js/app.js"
     },
     stylesheets: {
       joinTo: "css/app.css",
@@ -26,11 +19,7 @@ exports.config = {
     // This option sets where we should place non-css and non-js assets in.
     // By default, we set this to "/web/static/assets". Files in this directory
     // will be copied to `paths.public`, which is "priv/static" by default.
-    assets: /^(web\/static\/assets)/,
-    ignored: [
-     /^(web\/static\/vendor\/bootstrap\/)(?!.*min.(js|css)$)/,
-     /^(web\/static\/vendor\/jquery\/)(?!.*min.js)/
-    ]
+    assets: /^(web\/static\/assets)/
   },
 
   // Phoenix paths configuration
@@ -60,6 +49,13 @@ exports.config = {
   },
 
   npm: {
-    enabled: true
+    enabled: true,
+    styles: {
+      bootstrap: ["dist/css/bootstrap.min.css"]
+    },
+    globals: {
+      $: 'jquery',
+      jQuery: 'jquery'
+    }
   }
 };

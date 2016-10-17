@@ -97,6 +97,8 @@ defmodule Stockman.ConvertController do
   end
 
   def fetch_rates(conn, %{"convert_id" => convert_id}) do
+    Exq.enqueue(Exq, "default", Stockman.RateFetcher, [])
+
     conn
     |> put_flash(:success, "Fetching rates started in the background.")
     |> redirect(to: convert_path(conn, :index))

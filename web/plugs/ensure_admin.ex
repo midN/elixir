@@ -5,8 +5,10 @@ defmodule Stockman.Plug.EnsureAdmin do
 
   def call(conn, _opts) do
     current_user = Guardian.Plug.current_resource(conn)
+    admin_email = Application.get_env(:stockman, Stockman.Endpoint)[:admin_email]
+
     case current_user.email do
-      "andres@andres.wtf" ->
+      ^admin_email ->
         conn
       _ ->
         conn

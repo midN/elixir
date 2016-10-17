@@ -5,13 +5,13 @@
 // and connect at the socket path in "lib/my_app/endpoint.ex":
 import {Socket} from "phoenix"
 
-let guardianToken = jQuery('meta[name="guardian_token"]').attr('content')
+let guardianToken = $('meta[name="guardian_token"]').attr('content')
 let socket = new Socket("/socket", {params: {guardian_token: guardianToken}})
 
 socket.connect()
 
 // Now that you are connected, you can join channels with a topic:
-let user_id = jQuery('meta[name="user_id"]').attr('content')
+let user_id = $('meta[name="user_id"]').attr('content')
 let channel = socket.channel(`users:${user_id}`, {})
 
 channel.on("message", payload => {
