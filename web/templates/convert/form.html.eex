@@ -1,0 +1,37 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if f.errors != [] do %>
+    <div class="alert alert-danger">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <p>Oops, something went wrong! Please check the errors below:</p>
+      <ul>
+        <%= for {attr, message} <- f.errors do %>
+          <li><%= humanize(attr) %> <%= translate_error(message) %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :base_currency, class: "control-label" %>
+    <%= select f, :base_currency, allowed_currencies, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :target_currency, class: "control-label" %>
+    <%= select f, :target_currency, allowed_currencies, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :amount, class: "control-label" %>
+    <%= number_input f, :amount, step: "any", class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :waiting_time, class: "control-label" %>
+    <%= number_input f, :waiting_time, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

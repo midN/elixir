@@ -1,0 +1,29 @@
+<div class="jumbotron small-transparency">
+  <h2 class="text-center">Convert</h2>
+
+  <table class="table table-hover convert">
+    <thead>
+      <tr>
+        <th>Base currency</th>
+        <th>Target currency</th>
+        <th>Amount</th>
+        <th>Waiting time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= @convert.base_currency %></td>
+        <td><%= @convert.target_currency %></td>
+        <td><%= @convert.amount %></td>
+        <td><%= @convert.waiting_time %></td>
+        <td>
+          <%= link "Fetch rates", to: convert_ft_path(@conn, :fetch_rates, @convert),
+                                  class: "btn btn-primary" %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <%= link "Edit", to: convert_path(@conn, :edit, @convert), class: "btn btn-primary" %>
+  <%= link "Back", to: convert_path(@conn, :index), class: "btn btn-primary" %>
+</div>

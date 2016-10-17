@@ -1,0 +1,42 @@
+body {
+  background-image: url("/images/cartman.jpg");
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+  padding-bottom: 10px;
+  color: white;
+}
+
+.navbar-inner {
+  min-height: 0px;
+}
+
+.navbar-brand,
+.navbar-nav li a {
+  line-height: 60px;
+  height: 60px;
+  padding-top: 0;
+}
+
+.navbar-brand {
+  font-size: 35px;
+}
+
+.navbar-nav li a {
+  font-size: 20px;
+}
+
+.jumbotron {
+  color: black;
+  background: rgba(236, 238, 239, 0.7);
+}
+
+.jumbotron.small-transparency {
+  color: black;
+  background: rgba(236, 238, 239, 0.9);
+}
+
+.jumbotron h2 {
+  font-size: 40px;
+}

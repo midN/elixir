@@ -1,0 +1,6 @@
+<h2>Edit convert</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: convert_path(@conn, :update, @convert) %>
+
+<%= link "Back", to: convert_path(@conn, :index), class: "btn btn-primary" %>

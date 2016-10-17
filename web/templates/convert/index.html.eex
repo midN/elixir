@@ -1,0 +1,40 @@
+<div class="jumbotron small-transparency">
+  <h2 class="text-center">Converts</h2>
+
+  <%= if Enum.any?(@converts) do %>
+    <table class="table table-hover convert">
+      <thead>
+        <tr>
+          <th>Base currency</th>
+          <th>Target currency</th>
+          <th>Amount</th>
+          <th>Waiting time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for convert <- @converts do %>
+          <tr>
+            <td><%= convert.base_currency %></td>
+            <td><%= convert.target_currency %></td>
+            <td><%= convert.amount %></td>
+            <td><%= convert.waiting_time %></td>
+            <td>
+              <%= link "Show", to: convert_path(@conn, :show, convert), class: "btn btn-success" %>
+            </td>
+            <td>
+              <%= link "Delete", to: convert_path(@conn, :delete, convert), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <%= pagination_links @conn, @page %>
+
+  <% else %>
+    <h3><%= cartman_quote %></h3>
+    </br>
+  <% end %>
+
+  <%= link "New convert", to: convert_path(@conn, :new), class: "btn btn-primary" %>
+</div>

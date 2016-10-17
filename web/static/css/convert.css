@@ -1,0 +1,15 @@
+.table.convert td {
+  border-top: 1px solid black;
+}
+
+.table.convert thead {
+  border-bottom: 3px solid black;
+}
+
+.table.convert th {
+  font-size: 20px;
+}
+
+.table.convert td {
+  font-size: 17px;
+}

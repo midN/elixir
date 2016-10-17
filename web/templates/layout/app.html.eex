@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <%= if Guardian.Plug.current_token(@conn) do %>
+      <meta name='guardian_token' content="<%= Guardian.Plug.current_token(@conn) %>">
+      <meta name='user_id' content="<%= Guardian.Plug.current_resource(@conn).id %>">
+    <% end %>
+
+    <title>Hello Stockman!</title>
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+  </head>
+
+  <body>
+    <%= render "navigation.html", conn: @conn %>
+
+    <div class="container">
+      <div id="flashes">
+        <%= show_flash(@conn) %>
+      </div>
+
+      <main role="main">
+        <%= render @view_module, @view_template, assigns %>
+      </main>
+
+    </div>
+
+    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+  </body>
+</html>

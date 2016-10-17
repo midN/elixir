@@ -1,0 +1,33 @@
+<h1>Sign up!</h1>
+
+<%= form_for @changeset, user_path(@conn, :create), fn f -> %>
+
+  <%= if f.errors != [] do %>
+    <div class="alert alert-danger">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <p>Oops, something went wrong! Please check the errors below:</p>
+      <ul>
+        <%= for {attr, message} <- f.errors do %>
+          <li><%= humanize(attr) %> <%= translate_error(message) %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :email, "Email" %>
+    <%= text_input f, :email, placeholder: "Email", class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :password, "Password" %>
+    <%= password_input f, :password, placeholder: "Password", class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :password_confirmation, "Password confirmation" %>
+    <%= password_input f, :password_confirmation, class: "form-control" %>
+  </div>
+
+  <%= submit "Create new user", class: "btn btn-primary" %>
+<% end %>

@@ -1,0 +1,8 @@
+<div class="jumbotron">
+  <h1><%= cartman_quote %></h1>
+  <div class="text-center">
+    <%= link to: user_path(@conn, :new) do %>
+      <button class="btn btn-success btn-lg">Sign up</button>
+    <% end %>
+  </div>
+</div>
