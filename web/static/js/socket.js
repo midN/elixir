@@ -17,9 +17,10 @@ let channel = socket.channel(`users:${user_id}`, {})
 channel.on("message", payload => {
   let flashContainer = $('#flashes')
   let flash_msg = `
-    <div class='alert alert-success'>
+    <div class='alert alert-${payload.type}'>
       <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
       ${payload.body}
+      <a href="${payload.link}">Your Convert</a>
     </div>
   `
 

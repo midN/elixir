@@ -13,12 +13,16 @@
 
   <div class="form-group">
     <%= label f, :base_currency, class: "control-label" %>
-    <%= select f, :base_currency, allowed_currencies, class: "form-control" %>
+    <%= select f, :base_currency, allowed_currencies,
+                                  class: "form-control",
+                                  selected: selected_currency("base", f.data) %>
   </div>
 
   <div class="form-group">
     <%= label f, :target_currency, class: "control-label" %>
-    <%= select f, :target_currency, allowed_currencies, class: "form-control" %>
+    <%= select f, :target_currency, allowed_currencies,
+                                    class: "form-control",
+                                    selected: selected_currency("target", f.data) %>
   </div>
 
   <div class="form-group">

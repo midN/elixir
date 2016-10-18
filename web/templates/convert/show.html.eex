@@ -1,7 +1,10 @@
 <div class="jumbotron small-transparency">
   <h2 class="text-center">Convert</h2>
 
-  <table class="table table-hover convert">
+  <%= link "Edit", to: convert_path(@conn, :edit, @convert), class: "btn btn-primary" %>
+  <%= link "Back", to: convert_path(@conn, :index), class: "btn btn-primary" %>
+
+  <table class="table convert">
     <thead>
       <tr>
         <th>Base currency</th>
@@ -17,13 +20,44 @@
         <td><%= @convert.amount %></td>
         <td><%= @convert.waiting_time %></td>
         <td>
-          <%= link "Fetch rates", to: convert_ft_path(@conn, :fetch_rates, @convert),
-                                  class: "btn btn-primary" %>
+          <%= if !Enum.any?(@rates) do %>
+            <%= link "Fetch rates", to: convert_ft_path(@conn, :fetch_rates, @convert),
+                                    class: "btn btn-primary" %>
+            <% end %>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <%= link "Edit", to: convert_path(@conn, :edit, @convert), class: "btn btn-primary" %>
-  <%= link "Back", to: convert_path(@conn, :index), class: "btn btn-primary" %>
+  <h3 class="text-center">Rates</h3>
+  <canvas id="convertsChart" width="400" height="400"></canvas>
+
+  <table class="table table-hover convert">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Estimated Rate</th>
+        <th>Estimated Exchange Amount</th>
+        <th>Profit / Loss</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for rate <- @rates do %>
+        <tr>
+          <td><%= predicted_date(rate.date, @convert.waiting_time) %></td>
+          <td><%= predicted_rate(rate.rate, @rates) %></td>
+          <td><%= predicted_amount(@convert.amount, rate.rate, @rates) %></td>
+          <td><%= profit_loss(@convert.amount, rate.rate, @rates) %></td>
+          <td>
+            <%= if !Enum.any?(@rates) do %>
+              <%= link "Fetch rates", to: convert_ft_path(@conn, :fetch_rates, @convert),
+                                      class: "btn btn-primary" %>
+              <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= pagination_links @conn, @page, [@convert.id], path: &convert_path/4, action: :show %>
 </div>

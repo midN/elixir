@@ -2,12 +2,14 @@ defmodule Stockman.ConvertController do
   use Stockman.Web, :controller
 
   alias Stockman.Convert
+  alias Stockman.Rate
+  alias Stockman.RateFetcher
 
   def index(conn, params) do
     user = Guardian.Plug.current_resource(conn)
     page_number = Map.get(params, "page", 1)
-    page = user_converts(user)
-               |> Repo.paginate(page: page_number, page_size: 5)
+    page = Convert.user_converts(user)
+           |> Repo.paginate(page: page_number, page_size: 5)
 
     render(conn, "index.html", converts: page.entries, page: page)
   end
@@ -26,20 +28,22 @@ defmodule Stockman.ConvertController do
     |> Convert.changeset(convert_params)
 
     case Repo.insert(changeset) do
-      {:ok, _convert} ->
+      {:ok, convert} ->
         conn
         |> put_flash(:success, "Convert created successfully.")
-        |> redirect(to: convert_path(conn, :index))
+        |> redirect(to: convert_path(conn, :show, convert.id))
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, %{"id" => id} = params) do
     convert = Repo.get!(Convert, id)
+    page_number = Map.get(params, "page", 1)
+    rates = Rate.convert_rates(convert) |> Repo.paginate(page: page_number)
 
     if convert.user_id == conn.assigns.current_user.id do
-      render(conn, "show.html", convert: convert)
+      render(conn, "show.html", convert: convert, rates: rates.entries, page: rates)
     else
       conn
       |> put_flash(:error, "Access denied")
@@ -97,16 +101,28 @@ defmodule Stockman.ConvertController do
   end
 
   def fetch_rates(conn, %{"convert_id" => convert_id}) do
-    Exq.enqueue(Exq, "default", Stockman.RateFetcher, [])
-
-    conn
-    |> put_flash(:success, "Fetching rates started in the background.")
-    |> redirect(to: convert_path(conn, :index))
+    case rates_exist?(convert_id) do
+      true ->
+        conn
+        |> put_flash(:error, "Rates already exist.")
+        |> redirect(to: convert_path(conn, :show, convert_id))
+      false ->
+        conn
+        |> enqueue_rate_fetching(convert_id)
+        |> put_flash(:success, "Fetching rates started in the background.")
+        |> redirect(to: convert_path(conn, :index))
+    end
   end
 
-  defp user_converts(user) do
-    from c in Convert,
-      where: c.user_id == ^user.id,
-      select: [:id, :base_currency, :target_currency, :amount, :waiting_time]
+  defp rates_exist?(convert_id) do
+    Rate.convert_rates_exist(convert_id)
+    |> Repo.all
+    |> Enum.any?
+  end
+
+  defp enqueue_rate_fetching(conn, convert_id) do
+    user_id = conn.assigns.current_user.id
+    Exq.enqueue(Exq, "default", RateFetcher, [user_id, convert_id])
+    conn
   end
 end

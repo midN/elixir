@@ -7,6 +7,7 @@ defmodule Stockman.Convert do
     field :amount, :decimal
     field :waiting_time, :integer
     belongs_to :user, Stockman.User
+    has_many :rates, Stockman.Rate
 
     timestamps()
   end
@@ -43,4 +44,10 @@ defmodule Stockman.Convert do
     add_error(changeset, :currencies, "Base and Target must be different.")
   end
   defp validate_currencies_differ(changeset, _, _), do: changeset
+
+  def user_converts(user) do
+    from c in Stockman.Convert,
+      where: c.user_id == ^user.id,
+      select: [:id, :base_currency, :target_currency, :amount, :waiting_time]
+  end
 end

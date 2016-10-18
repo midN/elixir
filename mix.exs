@@ -21,7 +21,7 @@ defmodule Stockman.Mixfile do
      applications: [
                     :phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger,
                     :gettext, :phoenix_ecto, :postgrex, :comeonin,
-                    :scrivener_ecto, :scrivener_html, :exq
+                    :scrivener_ecto, :scrivener_html, :exq, :timex, :httpoison
                    ]]
   end
 
@@ -33,20 +33,13 @@ defmodule Stockman.Mixfile do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [{:phoenix, "~> 1.2.1"},
-     {:phoenix_pubsub, "~> 1.0"},
-     {:phoenix_ecto, "~> 3.0"},
-     {:postgrex, ">= 0.0.0"},
-     {:phoenix_html, "~> 2.6"},
-     {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:gettext, "~> 0.11"},
-     {:cowboy, "~> 1.0"},
-     {:comeonin, "~> 2.5"},
-     {:guardian, "~> 0.13.0"},
-     {:scrivener_ecto, "~> 1.0"},
-     {:scrivener_html, "~> 1.1"},
-     {:exq, "~> 0.8.0"},
-     {:exq_ui, "~> 0.8.1"}]
+    [{:phoenix, "~> 1.2.1"}, {:phoenix_pubsub, "~> 1.0"},
+     {:phoenix_ecto, "~> 3.0"}, {:postgrex, ">= 0.0.0"},
+     {:phoenix_html, "~> 2.6"}, {:phoenix_live_reload, "~> 1.0", only: :dev},
+     {:gettext, "~> 0.11"}, {:cowboy, "~> 1.0"}, {:comeonin, "~> 2.5"},
+     {:guardian, "~> 0.13.0"}, {:scrivener_ecto, "~> 1.0"},
+     {:scrivener_html, "~> 1.1"}, {:exq, "~> 0.8.0"},
+     {:exq_ui, "~> 0.8.1"}, {:timex, "~> 3.0"}, {:httpoison, "~> 0.9.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
