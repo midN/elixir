@@ -21,7 +21,8 @@ defmodule Stockman.Mixfile do
      applications: [
                     :phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger,
                     :gettext, :phoenix_ecto, :postgrex, :comeonin,
-                    :scrivener_ecto, :scrivener_html, :exq, :timex, :httpoison
+                    :scrivener_ecto, :scrivener_html, :exq, :timex, :httpoison,
+                    :exq_ui, :guardian
                    ]]
   end
 
@@ -39,7 +40,8 @@ defmodule Stockman.Mixfile do
      {:gettext, "~> 0.11"}, {:cowboy, "~> 1.0"}, {:comeonin, "~> 2.5"},
      {:guardian, "~> 0.13.0"}, {:scrivener_ecto, "~> 1.0"},
      {:scrivener_html, "~> 1.1"}, {:exq, "~> 0.8.0"},
-     {:exq_ui, "~> 0.8.1"}, {:timex, "~> 3.0"}, {:httpoison, "~> 0.9.0"}]
+     {:exq_ui, "~> 0.8.1"}, {:timex, "~> 3.0"}, {:httpoison, "~> 0.9.0"},
+     {:exrm, "~> 1.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

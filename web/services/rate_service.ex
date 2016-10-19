@@ -1,6 +1,5 @@
 defmodule Stockman.RateService do
-  import Ecto.Query
-  import Ecto
+  import Ecto, only: [build_assoc: 2]
   alias Stockman.Fixer
   alias Stockman.Repo
   alias Stockman.Convert
@@ -20,7 +19,7 @@ defmodule Stockman.RateService do
 
         Repo.transaction fn ->
           case process_rates(convert, rates, :fixer)
-               |> Enum.any?(fn({a, b}) -> a == :error end)
+               |> Enum.any?(fn({a, _b}) -> a == :error end)
           do
             true ->
               Repo.rollback(:rate_inserting_failed)
