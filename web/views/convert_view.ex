@@ -57,7 +57,11 @@ defmodule Stockman.ConvertView do
   def rounded_3(amount) do
     case Decimal.to_string(amount) |> String.contains?(".") do
       true ->
-        Decimal.round(amount, 3)
+        try do
+          Decimal.round(amount, 3) |> Decimal.to_integer |> Decimal.new
+        rescue
+          _ -> Decimal.round(amount, 3)
+        end
       false ->
         amount
     end
