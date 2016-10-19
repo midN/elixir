@@ -13,8 +13,34 @@ use Mix.Config
 # which you typically run after static files are built.
 config :stockman, Stockman.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/manifest.json"
+  url: [scheme: "https", host: "secure-chamber-65907", port: 443],
+    force_ssl: [rewrite_on: [:x_forwarded_proto]],
+  cache_static_manifest: "priv/static/manifest.json",
+  secret_key_base: System.get_env("SECRET_KEY_BASE")
+
+config :stockman, Stockman.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  url: System.get_env("DATABASE_URL"),
+  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+  ssl: true
+
+# Guardian
+config :guardian, Guardian,
+  allowed_algos: ["HS512"],
+  verify_module: Guardian.JWT,
+  issuer: "Stockman",
+  ttl: { 30, :days },
+  verify_issuer: true,
+  secret_key: System.get_env("GUARDIAN_KEY"),
+  serializer: Stockman.GuardianSerializer
+
+# Exq
+config :exq,
+  url: System.get_env("REDIS_URL"),
+  namespace: "exq",
+  concurrency: 10,
+  queues: ["default"],
+  max_retries: 5
 
 # Do not print debug messages in production
 config :logger, level: :info
@@ -58,4 +84,4 @@ config :logger, level: :info
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
-import_config "prod.secret.exs"
+# import_config "prod.secret.exs"
