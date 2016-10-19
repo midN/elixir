@@ -41,6 +41,7 @@ defmodule Stockman.Router do
 
     resources "/converts", ConvertController do
       get "/fetch_rates", ConvertController, :fetch_rates, as: :ft
+      get "/refetch_rates", ConvertController, :refetch_rates, as: :ft
     end
   end
 

@@ -21,12 +21,13 @@ defmodule Stockman.ConvertView do
 
     Decimal.sub(current_rate(rates).rate, old.rate)
     |> Decimal.add(rate)
-    |> Decimal.round(4)
+    |> rounded_3()
   end
 
   def predicted_amount(amount, rate, rates) do
     predicted_rate(rate, rates)
     |> Decimal.mult(amount)
+    |> rounded_3()
   end
 
   def profit_loss(amount, rate, rates) do
@@ -34,6 +35,7 @@ defmodule Stockman.ConvertView do
 
     predicted_amount(amount, rate, rates)
     |> Decimal.sub(current_amount)
+    |> rounded_3()
   end
 
   def json_rates(amount, rates, weeks) do
@@ -44,6 +46,21 @@ defmodule Stockman.ConvertView do
                   } end)
     |> Poison.encode!()
     |> raw
+  end
+
+  def top_three_rates(rates) do
+    rates
+    |> Enum.sort(fn(x, y) -> x.rate > y.rate end)
+    |> Enum.slice(0..2)
+  end
+
+  def rounded_3(amount) do
+    case Decimal.to_string(amount) |> String.contains?(".") do
+      true ->
+        Decimal.round(amount, 3)
+      false ->
+        amount
+    end
   end
 
   defp current_rate(rates) do

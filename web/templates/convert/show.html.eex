@@ -17,50 +17,73 @@
       <tr>
         <td><%= @convert.base_currency %></td>
         <td><%= @convert.target_currency %></td>
-        <td><%= @convert.amount %></td>
+        <td><%= rounded_3(@convert.amount) %></td>
         <td><%= @convert.waiting_time %></td>
         <td>
           <%= if !Enum.any?(@rates) do %>
-            <%= link "Fetch rates", to: convert_ft_path(@conn, :fetch_rates, @convert),
-                                    class: "btn btn-primary" %>
-            <% end %>
+            <%= link "Fetch rates",
+            to: convert_ft_path(@conn, :fetch_rates, @convert),
+            class: "btn btn-primary" %>
+          <% else %>
+            <%= link "Re-fetch rates",
+            to: convert_ft_path(@conn, :refetch_rates, @convert),
+            class: "btn btn-primary" %>
+          <% end %>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <h3 class="text-center">Rates</h3>
+  <%= if Enum.any?(@rates) do %>
+    <h2 class="text-center">Rates</h2>
 
-  <canvas id="convertsChart" width="400" height="200"></canvas>
-
-  <table class="table table-hover convert">
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Estimated Rate</th>
-        <th>Estimated Exchange Amount</th>
-        <th>Profit / Loss</th>
-      </tr>
-    </thead>
-    <tbody>
-      <%= for rate <- @rates do %>
+    <h3 class="text-center">Top Three</h3>
+    <table class="table table-hover convert">
+      <thead>
         <tr>
-          <td><%= predicted_date(rate.date, @convert.waiting_time) %></td>
-          <td><%= predicted_rate(rate.rate, @rates) %></td>
-          <td><%= predicted_amount(@convert.amount, rate.rate, @rates) %></td>
-          <td><%= profit_loss(@convert.amount, rate.rate, @rates) %></td>
-          <td>
-            <%= if !Enum.any?(@rates) do %>
-              <%= link "Fetch rates", to: convert_ft_path(@conn, :fetch_rates, @convert),
-                                      class: "btn btn-primary" %>
-              <% end %>
-          </td>
+          <th>Date</th>
+          <th>Estimated Rate</th>
+          <th>Estimated Exchange Amount</th>
+          <th>Profit / Loss</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <%= for rate <- top_three_rates(@all_rates) do %>
+          <tr>
+            <td><%= predicted_date(rate.date, @convert.waiting_time) %></td>
+            <td><%= predicted_rate(rate.rate, @all_rates) %></td>
+            <td><%= predicted_amount(@convert.amount, rate.rate, @all_rates) %></td>
+            <td><%= profit_loss(@convert.amount, rate.rate, @all_rates) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-  <%= pagination_links @conn, @page, [@convert.id], path: &convert_path/4, action: :show %>
+    <h3 class="text-center">All Rates</h3>
+    <canvas id="convertsChart" width="400" height="200"></canvas>
+    <table class="table table-hover convert">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Estimated Rate</th>
+          <th>Estimated Exchange Amount</th>
+          <th>Profit / Loss</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for rate <- @rates do %>
+          <tr>
+            <td><%= predicted_date(rate.date, @convert.waiting_time) %></td>
+            <td><%= predicted_rate(rate.rate, @all_rates) %></td>
+            <td><%= predicted_amount(@convert.amount, rate.rate, @all_rates) %></td>
+            <td><%= profit_loss(@convert.amount, rate.rate, @all_rates) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <%= pagination_links @conn, @page, [@convert.id], path: &convert_path/4, action: :show %>
+  <% end %>
 </div>
 
 <script>

@@ -40,8 +40,8 @@ defmodule Stockman.ConvertController do
   def show(conn, %{"id" => id} = params) do
     convert = Repo.get!(Convert, id)
     page_number = Map.get(params, "page", 1)
-    rates = Rate.convert_rates(convert) |> Repo.paginate(page: page_number)
-    all_rates = Rate.convert_rates(convert) |> Repo.all
+    rates = Rate.convert_rates(convert.id) |> Repo.paginate(page: page_number)
+    all_rates = Rate.convert_rates(convert.id) |> Repo.all
 
     if convert.user_id == conn.assigns.current_user.id do
       render(
@@ -75,6 +75,9 @@ defmodule Stockman.ConvertController do
       changeset = Convert.changeset(convert, convert_params)
       case Repo.update(changeset) do
         {:ok, convert} ->
+          Rate.convert_rates_to_delete(convert.id)
+          |> Repo.delete_all
+
           conn
           |> put_flash(:success, "Convert updated successfully.")
           |> redirect(to: convert_path(conn, :show, convert))
@@ -116,6 +119,16 @@ defmodule Stockman.ConvertController do
         |> put_flash(:success, "Fetching rates started in the background.")
         |> redirect(to: convert_path(conn, :index))
     end
+  end
+
+  def refetch_rates(conn, %{"convert_id" => convert_id}) do
+    Rate.convert_rates_to_delete(convert_id)
+    |> Repo.delete_all
+
+    conn
+    |> enqueue_rate_fetching(convert_id)
+    |> put_flash(:success, "Fetching rates started in the background.")
+    |> redirect(to: convert_path(conn, :index))
   end
 
   defp rates_exist?(convert_id) do

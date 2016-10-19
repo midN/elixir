@@ -16,7 +16,7 @@
           <tr>
             <td><%= convert.base_currency %></td>
             <td><%= convert.target_currency %></td>
-            <td><%= convert.amount %></td>
+            <td><%= rounded_3(convert.amount) %></td>
             <td><%= convert.waiting_time %></td>
             <td>
               <%= link "Show", to: convert_path(@conn, :show, convert), class: "btn btn-success" %>
