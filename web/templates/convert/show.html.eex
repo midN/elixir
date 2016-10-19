@@ -30,7 +30,8 @@
   </table>
 
   <h3 class="text-center">Rates</h3>
-  <canvas id="convertsChart" width="400" height="400"></canvas>
+
+  <canvas id="convertsChart" width="400" height="200"></canvas>
 
   <table class="table table-hover convert">
     <thead>
@@ -61,3 +62,7 @@
 
   <%= pagination_links @conn, @page, [@convert.id], path: &convert_path/4, action: :show %>
 </div>
+
+<script>
+  var rates = <%= json_rates(@convert.amount, @all_rates, @convert.waiting_time) %>;
+</script>

@@ -41,9 +41,13 @@ defmodule Stockman.ConvertController do
     convert = Repo.get!(Convert, id)
     page_number = Map.get(params, "page", 1)
     rates = Rate.convert_rates(convert) |> Repo.paginate(page: page_number)
+    all_rates = Rate.convert_rates(convert) |> Repo.all
 
     if convert.user_id == conn.assigns.current_user.id do
-      render(conn, "show.html", convert: convert, rates: rates.entries, page: rates)
+      render(
+             conn, "show.html", convert: convert,
+             rates: rates.entries, page: rates, all_rates: all_rates
+           )
     else
       conn
       |> put_flash(:error, "Access denied")

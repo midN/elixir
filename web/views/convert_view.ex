@@ -13,7 +13,7 @@ defmodule Stockman.ConvertView do
     Ecto.Date.to_string(date)
     |> Timex.parse!("%Y-%m-%d", :strftime)
     |> Timex.shift(weeks: weeks)
-    |> Timex.format!("%d.%m.%Y", :strftime)
+    |> Timex.format!("%Y-%m-%d", :strftime)
   end
 
   def predicted_rate(rate, rates) do
@@ -34,6 +34,16 @@ defmodule Stockman.ConvertView do
 
     predicted_amount(amount, rate, rates)
     |> Decimal.sub(current_amount)
+  end
+
+  def json_rates(amount, rates, weeks) do
+    rates
+    |> Enum.map(fn(x) -> %{
+                    x: predicted_date(x.date, weeks),
+                    y: predicted_amount(amount, x.rate, rates)
+                  } end)
+    |> Poison.encode!()
+    |> raw
   end
 
   defp current_rate(rates) do
