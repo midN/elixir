@@ -8,7 +8,7 @@ defmodule Stockman.ConvertController do
   def index(conn, params) do
     user = Guardian.Plug.current_resource(conn)
     page_number = Map.get(params, "page", 1)
-    page = Convert.user_converts(user)
+    page = Convert.user_converts(user.id)
            |> Repo.paginate(page: page_number, page_size: 5)
 
     render(conn, "index.html", converts: page.entries, page: page)

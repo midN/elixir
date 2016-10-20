@@ -1,13 +1,16 @@
 defmodule Stockman.Convert do
   use Stockman.Web, :model
+  alias Stockman.User
+  alias Stockman.Rate
+  alias Stockman.Convert
 
   schema "converts" do
     field :base_currency, :string
     field :target_currency, :string
     field :amount, :decimal
     field :waiting_time, :integer
-    belongs_to :user, Stockman.User
-    has_many :rates, Stockman.Rate
+    belongs_to :user, User
+    has_many :rates, Rate
 
     timestamps()
   end
@@ -45,9 +48,9 @@ defmodule Stockman.Convert do
   end
   defp validate_currencies_differ(changeset, _, _), do: changeset
 
-  def user_converts(user) do
-    from c in Stockman.Convert,
-      where: c.user_id == ^user.id,
+  def user_converts(user_id) do
+    from c in Convert,
+      where: c.user_id == ^user_id,
       select: [:id, :base_currency, :target_currency, :amount, :waiting_time]
   end
 end
