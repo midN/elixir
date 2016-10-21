@@ -1,6 +1,4 @@
 defmodule Stockman.RateFetcher do
-  import Ecto.Query
-  import Ecto
   import Stockman.Router.Helpers
   alias Stockman.Endpoint
   alias Stockman.RateService

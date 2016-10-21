@@ -1,0 +1,8 @@
+{
+  "skip_files": [
+    "test",
+    "lib/stockman.ex",
+    "lib/stockman/endpoint.ex",
+    "lib/stockman/repo.ex"
+  ]
+}

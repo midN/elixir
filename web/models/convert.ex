@@ -1,7 +1,5 @@
 defmodule Stockman.Convert do
   use Stockman.Web, :model
-  alias Stockman.User
-  alias Stockman.Rate
   alias Stockman.Convert
 
   schema "converts" do
@@ -9,8 +7,8 @@ defmodule Stockman.Convert do
     field :target_currency, :string
     field :amount, :decimal
     field :waiting_time, :integer
-    belongs_to :user, User
-    has_many :rates, Rate
+    belongs_to :user, Stockman.User
+    has_many :rates, Stockman.Rate
 
     timestamps()
   end

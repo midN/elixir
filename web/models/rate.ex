@@ -1,12 +1,11 @@
 defmodule Stockman.Rate do
   use Stockman.Web, :model
   alias Stockman.Rate
-  alias Stockman.Convert
 
   schema "rates" do
     field :date, Ecto.Date
     field :rate, :decimal
-    belongs_to :convert, Convert
+    belongs_to :convert, Stockman.Convert
 
     timestamps()
   end

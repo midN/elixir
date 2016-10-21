@@ -1,7 +1,6 @@
 defmodule Stockman.User do
   use Stockman.Web, :model
   alias Stockman.Repo
-  alias Stockman.Convert
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
   schema "users" do
@@ -9,7 +8,7 @@ defmodule Stockman.User do
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
     field :password_hash, :string
-    has_many :converts, Convert
+    has_many :converts, Stockman.Convert
 
     timestamps()
   end
