@@ -22,6 +22,7 @@ defmodule Stockman.ModelCase do
       import Ecto.Changeset
       import Ecto.Query
       import Stockman.ModelCase
+      import Stockman.Factory
     end
   end
 

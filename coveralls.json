@@ -4,5 +4,8 @@
     "lib/stockman.ex",
     "lib/stockman/endpoint.ex",
     "lib/stockman/repo.ex"
+  ],
+  "custom_stop_words": [
+    "schema"
   ]
 }
