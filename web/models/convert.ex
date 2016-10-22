@@ -35,6 +35,12 @@ defmodule Stockman.Convert do
      )
   end
 
+  def user_converts(user_id) do
+    from c in Convert,
+      where: c.user_id == ^user_id,
+      select: [:id, :base_currency, :target_currency, :amount, :waiting_time]
+  end
+
   defp validate_currencies_differ(changeset) do
     base = get_field(changeset, :base_currency)
     target = get_field(changeset, :target_currency)
@@ -45,10 +51,4 @@ defmodule Stockman.Convert do
     add_error(changeset, :currencies, "Base and Target must be different.")
   end
   defp validate_currencies_differ(changeset, _, _), do: changeset
-
-  def user_converts(user_id) do
-    from c in Convert,
-      where: c.user_id == ^user_id,
-      select: [:id, :base_currency, :target_currency, :amount, :waiting_time]
-  end
 end

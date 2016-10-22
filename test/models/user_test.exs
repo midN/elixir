@@ -1,5 +1,5 @@
 defmodule Stockman.UserTest do
-  use Stockman.ModelCase
+  use Stockman.ModelCase, async: true
 
   alias Stockman.User
 
