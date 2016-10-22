@@ -15,4 +15,11 @@ defmodule Stockman.Factory do
       target_currency: "USD", waiting_time: 42
     }
   end
+
+  def rate_factory do
+    %Stockman.Rate{
+      rate: Decimal.new("120.5"),
+      date: Ecto.Date.cast!(%{day: 17, month: 4, year: 2010})
+    }
+  end
 end

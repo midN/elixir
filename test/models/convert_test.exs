@@ -26,23 +26,23 @@ defmodule Stockman.ConvertTest do
     end
   end
 
-   describe "User.allowed_currencies" do
-     test "with valid currency" do
-       assert "EUR" in Convert.allowed_currencies
-     end
+  describe "User.allowed_currencies" do
+    test "with valid currency" do
+      assert "EUR" in Convert.allowed_currencies
+    end
 
-     test "with invalid currency" do
-       refute "FAG" in Convert.allowed_currencies
-     end
-   end
+    test "with invalid currency" do
+      refute "FAG" in Convert.allowed_currencies
+    end
+  end
 
-   describe "Convert.user_converts/1" do
-     test "returns Ecto.Query with converts found by user_id" do
-       user = insert(:user)
-       assert Convert.user_converts(user.id) |> Repo.all |> Enum.count == 0
+  describe "Convert.user_converts/1" do
+    test "finds user converts" do
+      user = insert(:user)
+      assert Convert.user_converts(user.id) |> Repo.all |> Enum.count == 0
 
-       insert(:convert, user: user)
-       assert Convert.user_converts(user.id) |> Repo.all |> Enum.count == 1
-     end
-   end
+      insert(:convert, user: user)
+      assert Convert.user_converts(user.id) |> Repo.all |> Enum.count == 1
+    end
+  end
 end

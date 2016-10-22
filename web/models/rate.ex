@@ -21,19 +21,6 @@ defmodule Stockman.Rate do
 
   def convert_rates(convert_id) do
     from r in Rate,
-      where: r.convert_id == ^convert_id,
-      select: [:id, :date, :rate],
-      order_by: [asc: :date]
-  end
-
-  def convert_rates_exist(convert_id) do
-    from r in Rate,
-      where: r.convert_id == ^convert_id,
-      select: 1, limit: 1
-  end
-
-  def convert_rates_to_delete(convert_id) do
-    from r in Rate,
     where: r.convert_id == ^convert_id
   end
 end

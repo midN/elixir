@@ -6,26 +6,23 @@ defmodule Stockman.ConvertController do
   alias Stockman.RateFetcher
 
   def index(conn, params) do
-    user = Guardian.Plug.current_resource(conn)
+    user = conn.assigns.current_user
     page_number = Map.get(params, "page", 1)
-    page = Convert.user_converts(user.id)
-           |> Repo.paginate(page: page_number, page_size: 5)
+    pages = Convert.user_converts(user.id)
+               |> Repo.paginate(page: page_number, page_size: 5)
 
-    render(conn, "index.html", converts: page.entries, page: page)
+    render(conn, "index.html", converts: pages.entries, page: pages)
   end
 
   def new(conn, _params) do
-    changeset = Guardian.Plug.current_resource(conn)
-    |> build_assoc(:converts)
-    |> Convert.changeset()
-
+    changeset = Convert.changeset(%Convert{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"convert" => convert_params}) do
-    changeset = Guardian.Plug.current_resource(conn)
-    |> build_assoc(:converts)
-    |> Convert.changeset(convert_params)
+    changeset = conn.assigns.current_user
+                |> build_assoc(:converts)
+                |> Convert.changeset(convert_params)
 
     case Repo.insert(changeset) do
       {:ok, convert} ->
@@ -39,14 +36,13 @@ defmodule Stockman.ConvertController do
 
   def show(conn, %{"id" => id} = params) do
     convert = Repo.get!(Convert, id)
-    page_number = Map.get(params, "page", 1)
-    rates = Rate.convert_rates(convert.id) |> Repo.paginate(page: page_number)
-    all_rates = Rate.convert_rates(convert.id) |> Repo.all
+    pages = rates(convert.id) |> Repo.paginate(page: Map.get(params, "page", 1))
+    rates = rates(convert.id) |> Repo.all
 
     if convert.user_id == conn.assigns.current_user.id do
       render(
              conn, "show.html", convert: convert,
-             rates: rates.entries, page: rates, all_rates: all_rates
+             rates: pages.entries, page: pages, all_rates: rates
            )
     else
       conn
@@ -75,7 +71,7 @@ defmodule Stockman.ConvertController do
       changeset = Convert.changeset(convert, convert_params)
       case Repo.update(changeset) do
         {:ok, convert} ->
-          Rate.convert_rates_to_delete(convert.id)
+          Rate.convert_rates(convert.id)
           |> Repo.delete_all
 
           conn
@@ -122,7 +118,7 @@ defmodule Stockman.ConvertController do
   end
 
   def refetch_rates(conn, %{"convert_id" => convert_id}) do
-    Rate.convert_rates_to_delete(convert_id)
+    Rate.convert_rates(convert_id)
     |> Repo.delete_all
 
     conn
@@ -131,8 +127,16 @@ defmodule Stockman.ConvertController do
     |> redirect(to: convert_path(conn, :index))
   end
 
+  defp rates(convert_id) do
+    Rate.convert_rates(convert_id)
+    |> Ecto.Query.select([:id, :date, :rate])
+    |> Ecto.Query.order_by([asc: :date])
+  end
+
   defp rates_exist?(convert_id) do
-    Rate.convert_rates_exist(convert_id)
+    Rate.convert_rates(convert_id)
+    |> Ecto.Query.select(1)
+    |> Ecto.Query.limit(1)
     |> Repo.all
     |> Enum.any?
   end
