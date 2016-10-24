@@ -1,4 +1,6 @@
 defmodule Stockman.LayoutView do
+  @moduledoc false
+
   use Stockman.Web, :view
 
   def get_flash_type(flash) do

@@ -1,4 +1,6 @@
 defmodule Stockman.User do
+  @moduledoc false
+
   use Stockman.Web, :model
   alias Stockman.Repo
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]

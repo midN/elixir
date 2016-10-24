@@ -1,4 +1,6 @@
 defmodule Stockman.Token do
+  @moduledoc false
+
   use Stockman.Web, :controller
 
   def unauthenticated(conn, _params) do

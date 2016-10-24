@@ -44,7 +44,8 @@ defmodule Stockman.Mixfile do
      {:scrivener_html, "~> 1.1"}, {:exq, "~> 0.8.0"},
      {:exq_ui, "~> 0.8.1"}, {:timex, "~> 3.0"}, {:httpoison, "~> 0.9.0"},
      {:excoveralls, "~> 0.5", only: :test},
-     {:ex_machina, "~> 1.0", only: :test}]
+     {:ex_machina, "~> 1.0", only: :test},
+     {:credo, "~> 0.4", only: [:dev, :test]}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

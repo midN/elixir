@@ -1,4 +1,6 @@
 defmodule Stockman.RateService do
+  @moduledoc false
+
   import Ecto, only: [build_assoc: 2]
 
   alias Stockman.Repo
@@ -18,16 +20,10 @@ defmodule Stockman.RateService do
           convert.waiting_time, convert.base_currency,
           convert.target_currency, :fixer
         )
+        processed_rates = process_rates(convert, rates, :fixer)
 
         Repo.transaction fn ->
-          case process_rates(convert, rates, :fixer)
-               |> Enum.any?(fn({a, _b}) -> a == :error end)
-          do
-            true ->
-              Repo.rollback(:rate_inserting_failed)
-            false ->
-              {:ok, :inserted}
-          end
+          insert_rates(processed_rates)
         end
     end
   end
@@ -37,7 +33,9 @@ defmodule Stockman.RateService do
 
     for x <- 0..weeks do
       date = Timex.shift(Timex.today, weeks: -x)
-      case @fixer.rates_url(date, base, target) |> @fixer.get() do
+      url = @fixer.rates_url(date, base, target)
+
+      case @fixer.get(url) do
         {:ok, resp} ->
           {date, resp.body[:rates][target]}
         {:error, _reason} ->
@@ -48,9 +46,20 @@ defmodule Stockman.RateService do
 
   def process_rates(convert, rates, :fixer) do
     for {date, rate} <- rates do
-      build_assoc(convert, :rates)
+      ch = build_assoc(convert, :rates)
+
+      ch
       |> Rate.changeset(%{date: date, rate: rate})
       |> Repo.insert
+    end
+  end
+
+  def insert_rates(rates) do
+    case Enum.any?(rates, fn({a, _b}) -> a == :error end) do
+      true ->
+        Repo.rollback(:rate_inserting_failed)
+      false ->
+        {:ok, :inserted}
     end
   end
 end

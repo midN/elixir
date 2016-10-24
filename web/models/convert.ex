@@ -1,4 +1,6 @@
 defmodule Stockman.Convert do
+  @moduledoc false
+
   use Stockman.Web, :model
   alias Stockman.Convert
 
@@ -22,7 +24,7 @@ defmodule Stockman.Convert do
     |> validate_required([:base_currency, :target_currency, :amount, :waiting_time])
     |> validate_inclusion(:base_currency, allowed_currencies)
     |> validate_inclusion(:target_currency, allowed_currencies)
-    |> validate_number(:amount, less_than: 2147483648, greater_than: 0)
+    |> validate_number(:amount, less_than: 2_147_483_648, greater_than: 0)
     |> validate_number(:waiting_time, greater_than: 0, less_than: 251)
     |> validate_currencies_differ()
   end

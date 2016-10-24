@@ -1,4 +1,6 @@
 defmodule Stockman.Helpers do
+  @moduledoc false
+
   def cartman_quote do
     [
       "Mom! Ben Affleck is naked in my bed!",

@@ -1,4 +1,6 @@
 defmodule Stockman.ConvertView do
+  @moduledoc false
+
   use Stockman.Web, :view
   import Scrivener.HTML
 
@@ -10,7 +12,9 @@ defmodule Stockman.ConvertView do
   def selected_currency("target", convert), do: convert.target_currency || "USD"
 
   def predicted_date(date, weeks) do
-    Ecto.Date.to_string(date)
+    edate = Ecto.Date.to_string(date)
+
+    edate
     |> Timex.parse!("%Y-%m-%d", :strftime)
     |> Timex.shift(weeks: weeks)
     |> Timex.format!("%Y-%m-%d", :strftime)
@@ -18,22 +22,26 @@ defmodule Stockman.ConvertView do
 
   def predicted_rate(rate, rates) do
     old = rates |> Enum.min_by(fn(x) -> x.date end)
+    amount = Decimal.sub(current_rate(rates).rate, old.rate)
 
-    Decimal.sub(current_rate(rates).rate, old.rate)
+    amount
     |> Decimal.add(rate)
     |> rounded_3()
   end
 
   def predicted_amount(amount, rate, rates) do
-    predicted_rate(rate, rates)
+    prate = predicted_rate(rate, rates)
+
+    prate
     |> Decimal.mult(amount)
     |> rounded_3()
   end
 
   def profit_loss(amount, rate, rates) do
     current_amount = Decimal.mult(amount, current_rate(rates).rate)
+    pamount = predicted_amount(amount, rate, rates)
 
-    predicted_amount(amount, rate, rates)
+    pamount
     |> Decimal.sub(current_amount)
     |> rounded_3()
   end
@@ -55,10 +63,13 @@ defmodule Stockman.ConvertView do
   end
 
   def rounded_3(amount) do
-    case Decimal.to_string(amount) |> String.contains?(".") do
+    string_amount = Decimal.to_string(amount)
+
+    case string_amount |> String.contains?(".") do
       true ->
         try do
-          Decimal.round(amount, 3) |> Decimal.to_integer |> Decimal.new
+          rounded_amount = Decimal.round(amount, 3)
+          rounded_amount |> Decimal.to_integer |> Decimal.new
         rescue
           _ -> Decimal.round(amount, 3)
         end

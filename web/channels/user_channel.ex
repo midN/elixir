@@ -1,4 +1,6 @@
 defmodule Stockman.UserChannel do
+  @moduledoc false
+
   use Phoenix.Channel
 
   def join("users:" <> user_id, _params, socket) do

@@ -1,4 +1,6 @@
 defmodule Stockman.Fixer do
+  @moduledoc false
+
   use HTTPoison.Base
 
   @expected_fields ~w(base date rates)

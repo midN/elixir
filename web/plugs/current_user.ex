@@ -1,4 +1,6 @@
 defmodule Stockman.Plug.CurrentUser do
+  @moduledoc false
+
   def init(opts), do: opts
 
   def call(conn, _opts) do

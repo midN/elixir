@@ -1,4 +1,5 @@
 defmodule Stockman.FixerMock do
+  @moduledoc false
 
   def start, do: nil
 

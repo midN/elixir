@@ -1,4 +1,6 @@
 defmodule Stockman.RateFetcher do
+  @moduledoc false
+
   import Stockman.Router.Helpers
   alias Stockman.Endpoint
   alias Stockman.RateService

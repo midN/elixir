@@ -1,4 +1,6 @@
 defmodule Stockman.Rate do
+  @moduledoc false
+
   use Stockman.Web, :model
   alias Stockman.Rate
 
