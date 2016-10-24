@@ -43,7 +43,7 @@ defmodule Stockman.Mixfile do
      {:guardian, "~> 0.13.0"}, {:scrivener_ecto, "~> 1.0"},
      {:scrivener_html, "~> 1.1"}, {:exq, "~> 0.8.0"},
      {:exq_ui, "~> 0.8.1"}, {:timex, "~> 3.0"}, {:httpoison, "~> 0.9.0"},
-     {:exrm, "~> 1.0"}, {:excoveralls, "~> 0.5", only: :test},
+     {:excoveralls, "~> 0.5", only: :test},
      {:ex_machina, "~> 1.0", only: :test}]
   end
 

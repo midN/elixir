@@ -16,10 +16,7 @@ config :stockman, Stockman.Endpoint,
   url: [scheme: "https", host: "el1x1r.herokuapp.com", port: 443],
     force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/manifest.json",
-  secret_key_base: System.get_env("SECRET_KEY_BASE"),
-  root: ".",
-  server: true,
-  version: Mix.Project.config[:version]
+  secret_key_base: System.get_env("SECRET_KEY_BASE")
 
 config :stockman, Stockman.Repo,
   adapter: Ecto.Adapters.Postgres,
@@ -77,7 +74,7 @@ config :logger, level: :info
 # If you are doing OTP releases, you need to instruct Phoenix
 # to start the server for all endpoints:
 #
-config :phoenix, :serve_endpoints, true
+# config :phoenix, :serve_endpoints, true
 #
 # Alternatively, you can configure exactly which server to
 # start per endpoint:
