@@ -1,4 +1,4 @@
-# Stockman
+# Stockman [![Coverage Status](https://coveralls.io/repos/github/midN/elixir/badge.svg?branch=master)](https://coveralls.io/github/midN/elixir?branch=master)
 > This is an Elixir example app i wrote in order to learn Elixir and it's features.
 
 ## Websites
