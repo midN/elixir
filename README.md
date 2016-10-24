@@ -16,5 +16,6 @@
   * For styleguides run `mix credo`
 
 ## Personal Roadmap
+  * Add build/test to travis-ci
   * Add GitHub / Facebook oAuth next to email/password registration
   * Add a chatbox for logged in users
