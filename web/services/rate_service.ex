@@ -10,47 +10,66 @@ defmodule Stockman.RateService do
   @fixer Application.get_env(:stockman, :fixer_api)
 
   def get_and_process_rates(convert_id, :fixer) do
-    convert = Repo.get(Convert, convert_id)
+    c = Repo.get(Convert, convert_id)
 
-    case convert do
+    case c do
       nil ->
         {:error, :record_not_found}
       _ ->
-        rates = get_rates(
-          convert.waiting_time, convert.base_currency,
-          convert.target_currency, :fixer
-        )
-        processed_rates = process_rates(convert, rates, :fixer)
-
-        Repo.transaction fn ->
-          insert_rates(processed_rates)
-        end
+        c.waiting_time
+        |> get_rates(c.base_currency, c.target_currency, :fixer)
+        |> process_rates(c, :fixer)
     end
   end
 
   def get_rates(weeks, base, target, :fixer) do
     @fixer.start
 
-    for x <- 0..weeks do
-      date = Timex.shift(Timex.today, weeks: -x)
-      url = @fixer.rates_url(date, base, target)
+    weeks
+    |> compute_dates
+    |> build_urls(base, target)
+    |> get_responses
+    |> format_responses
+  end
 
-      case @fixer.get(url) do
-        {:ok, resp} ->
-          {date, resp.body[:rates][target]}
-        {:error, _reason} ->
-          {date, nil}
+  def process_rates(rates, convert, :fixer) do
+    Repo.transaction fn ->
+      for {date, rate} <- rates do
+        edate = Ecto.Date.cast!(date)
+
+        convert
+        |> build_assoc(:rates)
+        |> Rate.changeset(%{date: edate, rate: rate})
+        |> Repo.insert
       end
+      |> insert_rates
     end
   end
 
-  def process_rates(convert, rates, :fixer) do
-    for {date, rate} <- rates do
-      ch = build_assoc(convert, :rates)
+  def compute_dates(weeks) do
+    for i <- 0..weeks, do: Timex.shift(Timex.today, weeks: -i)
+  end
 
-      ch
-      |> Rate.changeset(%{date: date, rate: rate})
-      |> Repo.insert
+  def build_urls(dates, base, target) do
+    for i <- dates do
+      %{target: target, date: i, url: @fixer.rates_url(i, base, target)}
+    end
+  end
+
+  def get_responses(url_structs) do
+    for i <- url_structs do
+      %{target: i.target, date: i.date, resp: @fixer.get(i.url)}
+    end
+  end
+
+  def format_responses(resp_structs) do
+    for i <- resp_structs do
+      case i.resp do
+        {:ok, resp} ->
+          {i.date, resp.body[:rates][i.target]}
+        {:error, _reason} ->
+          {i.date, nil}
+      end
     end
   end
 
