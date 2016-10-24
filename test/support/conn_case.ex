@@ -26,9 +26,22 @@ defmodule Stockman.ConnCase do
       import Ecto.Query
 
       import Stockman.Router.Helpers
+      import Stockman.Factory
 
       # The default endpoint for testing
       @endpoint Stockman.Endpoint
+
+      @doc """
+      Helper for setting up a `conn` which logs in a user
+      """
+      def guardian_login(user, token \\ :token, opts \\ []) do
+        build_conn
+        |> bypass_through(Stockman.Router, [:browser])
+        |> get("/")
+        |> Guardian.Plug.sign_in(user, token, opts)
+        |> send_resp(200, "Flush the session")
+        |> recycle
+      end
     end
   end
 

@@ -5,12 +5,11 @@ defmodule Stockman.SessionController do
     case Guardian.Plug.authenticated?(conn) do
       true ->
         conn
-        |> put_flash(:error, "Already authenticated.")
-        |> redirect(to: "/")
+        |> put_flash(:danger, "Already authenticated.")
+        |> redirect(to: convert_path(conn, :index))
       _ ->
         render conn, "new.html"
     end
-    render conn, "new.html"
   end
 
   def create(conn, %{"session" => %{"email" => email, "password" => pass}}) do
@@ -22,7 +21,7 @@ defmodule Stockman.SessionController do
         |> redirect(to: convert_path(conn, :index))
       {:error, _reason} ->
         conn
-        |> put_flash(:error, "Wrong email/password.")
+        |> put_flash(:danger, "Wrong email/password.")
         |> render("new.html")
     end
   end

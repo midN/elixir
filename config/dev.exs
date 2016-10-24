@@ -50,4 +50,7 @@ config :exq,
   queues: ["default"],
   max_retries: 5
 
+config :stockman, :fixer_api, Stockman.Fixer
+config :stockman, :queue, Exq
+
 import_config "dev.secret.exs"

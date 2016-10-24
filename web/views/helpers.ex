@@ -1,7 +1,4 @@
-defmodule Stockman.ViewHelper do
-  def current_user(conn), do: Guardian.Plug.current_resource(conn)
-  def logged_in?(conn), do: Guardian.Plug.authenticated?(conn)
-
+defmodule Stockman.Helpers do
   def cartman_quote do
     [
       "Mom! Ben Affleck is naked in my bed!",

@@ -5,6 +5,8 @@ defmodule Stockman.ConvertController do
   alias Stockman.Rate
   alias Stockman.RateFetcher
 
+  @queue Application.get_env(:stockman, :queue)
+
   def index(conn, params) do
     user = conn.assigns.current_user
     page_number = Map.get(params, "page", 1)
@@ -46,7 +48,7 @@ defmodule Stockman.ConvertController do
            )
     else
       conn
-      |> put_flash(:error, "Access denied")
+      |> put_flash(:danger, "Access denied")
       |> redirect(to: convert_path(conn, :index))
     end
   end
@@ -59,7 +61,7 @@ defmodule Stockman.ConvertController do
       render(conn, "edit.html", convert: convert, changeset: changeset)
     else
       conn
-      |> put_flash(:error, "Access denied")
+      |> put_flash(:danger, "Access denied")
       |> redirect(to: convert_path(conn, :index))
     end
   end
@@ -82,7 +84,7 @@ defmodule Stockman.ConvertController do
       end
     else
       conn
-      |> put_flash(:error, "Access denied")
+      |> put_flash(:danger, "Access denied")
       |> redirect(to: convert_path(conn, :index))
     end
   end
@@ -94,11 +96,11 @@ defmodule Stockman.ConvertController do
       Repo.delete!(convert)
 
       conn
-      |> put_flash(:error, "Convert deleted successfully.")
+      |> put_flash(:danger, "Convert deleted successfully.")
       |> redirect(to: convert_path(conn, :index))
     else
       conn
-      |> put_flash(:error, "Access denied")
+      |> put_flash(:danger, "Access denied")
       |> redirect(to: convert_path(conn, :index))
     end
   end
@@ -107,7 +109,7 @@ defmodule Stockman.ConvertController do
     case rates_exist?(convert_id) do
       true ->
         conn
-        |> put_flash(:error, "Rates already exist.")
+        |> put_flash(:danger, "Rates already exist.")
         |> redirect(to: convert_path(conn, :show, convert_id))
       false ->
         conn
@@ -143,7 +145,7 @@ defmodule Stockman.ConvertController do
 
   defp enqueue_rate_fetching(conn, convert_id) do
     user_id = conn.assigns.current_user.id
-    Exq.enqueue(Exq, "default", RateFetcher, [user_id, convert_id])
+    @queue.enqueue(Exq, "default", RateFetcher, [user_id, convert_id])
     conn
   end
 end

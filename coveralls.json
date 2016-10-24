@@ -3,9 +3,19 @@
     "test",
     "lib/stockman.ex",
     "lib/stockman/endpoint.ex",
-    "lib/stockman/repo.ex"
+    "lib/stockman/repo.ex",
+    "web/plugs",
+    "web/router.ex",
+    "web/web.ex",
+    "web/workers",
+    "web/auth/guardian_serializer.ex",
+    "web/channels/user_socket.ex",
+    "web/channels/user_channel.ex"
   ],
   "custom_stop_words": [
     "schema"
-  ]
+  ],
+  "coverage_options": {
+    "treat_no_relevant_lines_as_covered": true,
+  }
 }

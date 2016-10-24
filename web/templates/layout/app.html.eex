@@ -20,7 +20,12 @@
 
     <div class="container">
       <div id="flashes">
-        <%= show_flash(@conn) %>
+        <%= for x <- get_flash(@conn) do %>
+          <div class='alert alert-<%= get_flash_type(x)%>'>
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <%= get_flash_msg(x) %>
+          </div>
+        <% end %>
       </div>
 
       <main role="main">

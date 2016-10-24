@@ -12,7 +12,7 @@
 
     <div class="collapse navbar-collapse" id="navcollapse">
       <ul class="nav navbar-nav navbar-right">
-        <%= if logged_in?(@conn) do %>
+        <%= if @conn.assigns.current_user do %>
           <li>
             <%= link to: convert_path(@conn, :index) do %>
               <button class="btn btn-primary">Converts</button>

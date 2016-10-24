@@ -54,7 +54,7 @@ defmodule Stockman.Web do
       import Stockman.Router.Helpers
       import Stockman.ErrorHelpers
       import Stockman.Gettext
-      import Stockman.ViewHelper
+      import Stockman.Helpers
     end
   end
 

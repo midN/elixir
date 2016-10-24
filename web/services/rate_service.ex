@@ -1,9 +1,11 @@
 defmodule Stockman.RateService do
   import Ecto, only: [build_assoc: 2]
-  alias Stockman.Fixer
+
   alias Stockman.Repo
   alias Stockman.Convert
   alias Stockman.Rate
+
+  @fixer Application.get_env(:stockman, :fixer_api)
 
   def get_and_process_rates(convert_id, :fixer) do
     convert = Repo.get(Convert, convert_id)
@@ -31,11 +33,11 @@ defmodule Stockman.RateService do
   end
 
   def get_rates(weeks, base, target, :fixer) do
-    Fixer.start
+    @fixer.start
 
     for x <- 0..weeks do
       date = Timex.shift(Timex.today, weeks: -x)
-      case Fixer.rates_url(date, base, target) |> Fixer.get() do
+      case @fixer.rates_url(date, base, target) |> @fixer.get() do
         {:ok, resp} ->
           {date, resp.body[:rates][target]}
         {:error, _reason} ->

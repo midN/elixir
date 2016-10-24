@@ -6,7 +6,7 @@ defmodule Stockman.UserController do
     case Guardian.Plug.authenticated?(conn) do
       true ->
         conn
-        |> put_flash(:error, "Already authenticated.")
+        |> put_flash(:danger, "Already authenticated.")
         |> redirect(to: convert_path(conn, :index))
       _ ->
         changeset = User.changeset(%User{})

@@ -85,6 +85,9 @@ config :phoenix, :serve_endpoints, true
 #     config :stockman, Stockman.Endpoint, server: true
 #
 
+config :stockman, :fixer_api, Stockman.Fixer
+config :stockman, :queue, Exq
+
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
 # import_config "prod.secret.exs"

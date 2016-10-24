@@ -17,3 +17,8 @@ config :stockman, Stockman.Repo,
   database: "stockman_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :stockman, :fixer_api, Stockman.FixerMock
+config :stockman, :queue, Stockman.ExqMock
+
+config :exq_ui, server: false
