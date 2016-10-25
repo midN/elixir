@@ -5,7 +5,6 @@ elixir:
 env:
   - MIX_ENV=test
 install:
-  - rm -rf _build
   - mix local.hex --force
   - mix local.rebar --force
   - mix deps.get
@@ -16,6 +15,9 @@ addons:
 services:
   - postgresql
   - redis-server
-
 before_script:
   - psql -c 'create database stockman_test;' -U postgres
+cache:
+  directories:
+    - _build
+    - deps
