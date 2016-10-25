@@ -1,0 +1,19 @@
+sudo: false
+language: elixir
+elixir:
+    - 1.3.4
+env:
+  - MIX_ENV=test
+install:
+  - rm -rf _build
+  - mix local.hex --force
+  - mix deps.get
+script:
+  - mix test
+addons:
+  postgresql: "9.4"
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database stockman_test;' -U postgres
