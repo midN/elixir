@@ -1,4 +1,4 @@
-# Stockman [![Coverage Status](https://coveralls.io/repos/github/midN/elixir/badge.svg?branch=master)](https://coveralls.io/github/midN/elixir?branch=master)
+# Stockman [![Coverage Status](https://coveralls.io/repos/github/midN/elixir/badge.svg?branch=master)](https://coveralls.io/github/midN/elixir?branch=master) [![Build Status](https://travis-ci.org/midN/elixir.svg?branch=master)](https://travis-ci.org/midN/elixir)
 > This is an Elixir example app i wrote in order to learn Elixir and it's features.
 
 ## Websites
@@ -16,6 +16,5 @@
   * For styleguides run `mix credo`
 
 ## Personal Roadmap
-  * Add build/test to travis-ci
   * Add GitHub / Facebook oAuth next to email/password registration
   * Add a chatbox for logged in users
