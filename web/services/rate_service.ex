@@ -35,6 +35,7 @@ defmodule Stockman.RateService do
   def process_rates(rates, convert, :fixer) do
     Repo.transaction fn ->
       for {date, rate} <- rates do
+        rate = rate || 1
         edate = Ecto.Date.cast!(date)
 
         convert
